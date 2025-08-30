@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Countdown</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="CDStyles.css">
+    </head>
+    <body>
+       
+        
+        <h1>Countdown</h1>
+       
+
+        <div id="cornerbuttons">
+            <button id="rules-button" onclick="location.href='CDRules.html';">Rules</button> 
+            <button id="reset-button" onclick="resetGame()">Restart</button>
+        </div>
+
+        <button id="leaderboard-button" onclick = "location.href='leaderboard.html';">LeaderBoard</button>
+        
+        
+        <div class="outer-clock">
+            
+            <div class="clock">
+                <div class="inner-clock"> 
+                    <div id="x-line"></div>
+                    <div id="y-line"></div>                                
+                    
+                    
+                    <div id="hour-1" class="hour"></div>
+                    <div id="hour-2" class="hour"></div>
+                    <div id="hour-4" class="hour"></div>
+                    <div id="hour-5" class="hour"></div>
+                    <div id="hour-7" class="hour"></div>
+                    <div id="hour-8" class="hour"></div>
+                    <div id="hour-10" class="hour"></div>
+                    <div id="hour-11" class="hour"></div>
+                    <div class="yellow-space"></div>
+                </div>
+            </div>
+            <div class="hand-circle"></div>
+            <div class="hand"></div>
+        </div>
+        
+        
+        
+        <div class="large-button-container" id="largeNumbersSelection">
+            <button type="button" class="large-button" onclick="writeNumbers(0, 6)">0 Large </button>
+            <button type="button" class="large-button" onclick="writeNumbers(1, 5)">1 Large </button>
+            <button type="button" class="large-button" onclick="writeNumbers(2, 4)">2 Large </button>
+            <button type="button" class="large-button" onclick="writeNumbers(3, 3)">3 Large </button>           
+        </div>
+        <button type="button"class="large-button" id="large-button-4" onclick="writeNumbers(4, 2)">4 Large </button>
+        
+                
+        <div class="game-container">   
+            <div id="target_Number" class="target-number">000</div>
+            <div class = "undo-container">
+                <button  type="button" id="back_one" class="undo_button" disabled onclick="playGame(this)">←</button>
+                <button  type="button" id="reset_calculations" class="undo_button" disabled onclick="playGame(this)">⟲</button>
+            </div>
+            
+
+            <div class="operators-container" >
+                <button type="button" id="+" class="operator-button" disabled >+</button>
+                <button type="button" id="-" class="operator-button" disabled >-</button>
+                <button type="button" id="x" class="operator-button" disabled >*</button>
+                <button type="button" id="/" class="operator-button" disabled >/</button>
+                <div id="user-message" hidden>helooooooooo</div>
+            </div>
+            <div class="numbers-container">
+                <button type="button" id="b1" class="number-box" disabled></button>
+                <button type="button" id="b2" class="number-box" disabled></button>
+                <button type="button" id="b3" class="number-box" disabled></button>
+                <button type="button" id="b4" class="number-box" disabled></button>
+                <button type="button" id="b5" class="number-box" disabled></button>
+                <button type="button" id="b6" class="number-box" disabled></button>
+            
+                
+            </div>
+        </div>
+
+        <div class = "startContainer">
+            <button type="button" id="reveal-button" onclick="revealSolution()" disabled hidden>Reveal Solution</button>
+            <button type="button" id="start-button" onclick="startGame()" disabled >Start</button>
+            
+        </div>
+
+        <div class = "solution-container" hidden></div>
+
+        
+
+        
+
+
+
+
+
+
+
+
+        <script>
+            
+
+            var ogGameNumbers = [];
+            var targetNumber = null;
+            var solutionArray = [];
+
+            var startTime = null;
+            var endTime = null;
+            var userTime = null;
+            var countDownTimer = null;
+            var w ;
+
+
+            ///////////////
+            var oldNumbers = [];
+            var oldIds = [];
+            ///////////////
+           
+            
+            function selectLargeNumbers(x) {
+                var largeNumbersArray = [25,50,75,100];
+                var largeArray = [];
+                y = 4;
+                while (x>0){
+                    var index = Math.floor(Math.random()*y);
+                    var number = largeNumbersArray.splice(index, 1)[0];
+                    largeArray.push(number);  
+                    x = x - 1;
+                    y = y - 1;    
+                }
+                return largeArray;  
+            }
+            
+            function selectSmallNumbers(x){  
+                var smallNumbersArray = [1,2,3,4,5,6,7,8,9,10];
+                var smallArray = [];
+                y = 10;
+                while (x>0){
+                   var index = Math.floor(Math.random()*y);
+                   var number = smallNumbersArray.splice(index, 1)[0];
+                   smallArray.push(number);  
+                   x = x - 1;
+                   y = y - 1;
+                }
+                return smallArray;                
+            }
+        
+            function writeNumbers(largecount, smallcount){
+                var largeNumbers = selectLargeNumbers(largecount);
+                var smallNumbers = selectSmallNumbers(smallcount);
+                ogGameNumbers = smallNumbers.concat(largeNumbers);
+                               
+                displayNumbers(ogGameNumbers); 
+                var boxes = document.querySelectorAll(".large-button");
+                boxes.forEach(box => {
+                    box.disabled = true;
+                    box.style.backgroundColor = "#d81b60";
+                })   
+
+                var startButton = document.getElementById('start-button');
+                startButton.disabled = false;
+            }
+               
+            function displayNumbers(numbers) {
+                var boxes = document.querySelectorAll('.number-box');
+                boxes.forEach((box, index) => {
+                    box.innerText = numbers[index]; 
+                });
+            }
+  
+
+
+
+            function startGame(){
+                startTime = new Date();
+                targetNumber = 101;
+                while(targetNumber <= 101){
+                    targetNumber = Math.floor(Math.random() * 1000);
+                }
+                
+                
+
+                var targetBox = document.querySelector(".target-number");
+                targetBox.innerText = targetNumber;
+               
+                start_Button = document.getElementById('start-button');
+                start_Button.disabled = true;
+                start_Button.hidden = true;
+
+                var reset_calculations_button = document.getElementById("reset_calculations");
+                reset_calculations_button.disabled= false;
+
+                var boxes = document.querySelectorAll('.number-box');
+                boxes.forEach(box => {
+                    box.disabled = false;
+                })
+
+                
+                
+
+                setTimeout(startWorker, 500);
+                
+
+                setTimeout(userMessage, 30000);
+
+                var hand = document.querySelector('.hand');
+                hand.style.animation = 'rotate-hand 30s linear 1 forwards';
+
+                var themeTune = new Audio("CD.mp3");
+                themeTune.play()
+
+                setTimeout(disableGame, 30100);
+
+                
+
+                
+
+
+                
+            }
+
+
+
+            
+
+            function showRevealButton(){
+                var reveal_Button = document.getElementById('reveal-button');
+                reveal_Button.hidden = false;
+                reveal_Button.disabled = false;
+
+            }
+
+        
+
+
+
+
+
+
+            function useOperator(op, x, y){
+                if (op == '+') return x + y;
+                if (op == '-' && x - y >= 0) return x - y;
+                if (op == '*') return x * y;
+                if (op == '/' && y !== 0 && x % y == 0) return x / y;
+                return null;
+            }
+
+            function startWorker() {
+                if (typeof(w) == "undefined") {
+                    w = new Worker("worker.js");
+                    console.log("worker made");
+
+                }
+
+                
+                console.log("message posted")
+
+                w.onmessage = function(event) {
+                    solutionArray = event.data;
+
+                    var timeNow = new Date();
+                    var timeTaken = ((timeNow - startTime)/1000);
+                    if(timeTaken < 5){
+                        setTimeout(showRevealButton, 30000)
+                    }
+                    else if(timeTaken < 10){
+                        setTimeout(showRevealButton, 25000)
+                    }
+                    else if(timeTaken < 15){
+                        setTimeout(showRevealButton, 20000)
+                    }
+                    else if(timeTaken < 20){
+                        setTimeout(showRevealButton, 15000)
+                    }
+                    else if(timeTaken < 25){
+                        setTimeout(showRevealButton, 10000)
+                    }
+                    else if(timeTaken < 30){
+                        setTimeout(showRevealButton, 5000)
+                    }
+                    else if(timeTaken > 30){
+                        showRevealButton();
+                    }
+                    
+
+                    
+
+                }
+
+                w.postMessage({
+                    ogGameNumbers: ogGameNumbers,
+                    targetNumber: targetNumber
+                    
+
+                })
+
+                    
+                    
+                    
+                    
+                };
+                
+                
+            
+
+
+
+            function revealSolution(){
+                var solution = solutionArray;
+                var output = document.querySelector('.solution-container');
+                output.hidden = false;
+
+                if (solution != null) {
+                    output.innerHTML = "<h3><u>Solution</u></h3>";
+                    solution.forEach(equation =>{
+                        output.innerHTML = output.innerHTML + "<p>" + equation + "</p>";
+                    })
+                    
+                }
+
+                
+
+                else {
+                    output.innerHTML = "<h3>No solution found</h3>";
+                }
+
+                var reveal_Button = document.getElementById('reveal-button');
+                reveal_Button.hidden = true;
+                reveal_Button.disabled = true;
+            }
+
+
+            
+
+            
+                
+       
+
+            var numberOne = null;
+            var numberTwo = null;
+            var n1Id = null; 
+            var n2Id = null;
+            var selectedOperator = null;
+
+            var numbers = document.querySelectorAll('.number-box');
+            var ops = document.querySelectorAll('.operator-button');
+            
+            numbers.forEach(button => {
+                button.addEventListener("click", function(){
+                    playGame(button);
+                });
+            })
+
+            ops.forEach(operator =>{
+                operator.addEventListener('click', function(){
+                    playGame(operator);
+                })
+            })
+
+
+
+
+            function playGame(input){
+
+                if (numberOne == null && input.id != "back_one" && input.id != "reset_calculations"){
+                    
+                    numberOne = parseInt(input.innerText);
+                    n1Id = input.id;
+                    input.style.backgroundColor = "#c2185b";
+                    input.disabled = true;
+                    
+                    ops.forEach(operator => {
+                        operator.disabled = false;
+                    })
+
+                    var boxes = document.querySelectorAll('.number-box');
+                    boxes.forEach(box =>{
+                        box.disabled = true;
+                    })
+
+                    back_Button = document.getElementById("back_one");
+                    back_Button.disabled = false;
+                    console.log("Enabling back button line 336...")
+
+
+                }
+
+                else if (numberOne != null && selectedOperator == null && input.id != "back_one" && input.id != "reset_calculations"){
+                    selectedOperator = input.innerText;
+                    input.style.backgroundColor = '#c2185b';
+
+                    ops.forEach(operator => {
+                        operator.disabled = true;
+                    })
+
+                    var boxes = document.querySelectorAll('.number-box');
+                    boxes.forEach(box => {
+                        if(box.innerText.length > 0 ) {
+                            box.disabled = false;
+                        }})
+
+            
+                    
+
+                    document.getElementById(n1Id).disabled = true;
+                    }
+
+            
+
+                else if (numberOne != null && selectedOperator != null && input.id != "back_one" && input.id != "reset_calculations"){
+                    numberTwo = parseInt(input.innerText);
+                    n2Id = input.id;
+
+                    update(numberOne, selectedOperator, numberTwo, n1Id, n2Id);
+   
+                }
+
+
+                else if(input.id == "back_one"){
+                    if(numberOne != null && selectedOperator == null){
+
+                        input.disabled = false;///////////
+
+                        numberOne = null;
+
+                        var box = document.getElementById(n1Id)
+                        box.style.backgroundColor = '#f0206c' 
+
+
+                       
+                    
+                        ops.forEach(operator => {
+                            operator.disabled = true;
+                        })
+
+                        var boxes = document.querySelectorAll('.number-box');
+                        boxes.forEach(box =>{
+                            if(box.innerText.length > 0){
+                                box.disabled = false;
+                            }
+                        })
+                        n1Id = null;  
+                        
+                        if (oldNumbers.length < 2){
+                            input.disabled = true;
+                        }
+                    }
+
+                    else if(numberOne != null && selectedOperator != null){
+                        selectedOperator = null;
+
+                        ops.forEach(operator => {
+                            operator.disabled = false;
+                            operator.style.backgroundColor = '#f0206c';
+                        })
+
+                        var boxes = document.querySelectorAll('.number-box');
+                        boxes.forEach(box =>{
+                            box.disabled = true;
+                        })
+
+                        
+                    }
+
+                    ///////////////////////
+                    else if(numberOne == null && selectedOperator == null && oldNumbers.length >=2){
+                        var box2Id = oldIds.pop();
+                        var box2 = document.getElementById(box2Id)
+                        box2.innerText = oldNumbers.pop();
+
+                        var box1Id = oldIds.pop();
+                        var box1 = document.getElementById(box1Id)
+                        box1.innerText = oldNumbers.pop();
+
+                        box2.style.backgroundColor ="#f0206c";
+                        box2.disabled = false;
+
+                        if (oldNumbers.length < 2){
+                            input.disabled = true;
+                        }
+                    }
+                    //////////////////////
+                }  
+                
+                else if(input.id == "reset_calculations"){
+
+                    numberOne = null;
+                    numberTwo = null;
+                    n1Id = null; 
+                    n2Id = null;
+                    selectedOperator = null;
+
+                    numbers.forEach((number, index) =>{
+                        number.innerText = ogGameNumbers[index];
+                        number.disabled = false;
+                        number.style.backgroundColor = "#f0206c";
+                        number.style.fontSize = '46px';
+                    })
+
+                    back_one_button = document.getElementById("back_one");
+                    back_one_button.disabled = true;
+                    console.log("Disabling back button line 455...")
+
+
+                    ops.forEach(operator => {
+                        operator.disabled = true;
+                        operator.style.backgroundColor = '#f0206c'
+                    })
+                }
+            }
+            
+
+
+
+            function update( n1, sO, n2, n1identification, n2identification){
+                
+                var answer = useOperator(sO, n1, n2);
+                var box = document.getElementById(n1identification);
+                var box2 = document.getElementById(n2identification);
+                
+
+                if(answer != null){
+                    box.innerText = answer;
+                    box2.innerText = "";
+                    
+                    box.disabled = false;
+                    box2.disabled = true;
+                    
+                    box.style.backgroundColor = "#f0206c";
+                    box2.style.backgroundColor = "#a01349";
+
+                    if(box.innerText.length < 4){
+                        box.style.fontSize = "46px";
+                    }
+                    else if(box.innerText.length == 4){
+                        box.style.fontSize = "33px";
+                    }
+                    else if(box.innerText.length == 5){
+                        box.style.fontSize = "27px";
+                    }
+                    else if(box.innerText.length == 6){
+                        box.style.fontSize = "22px";
+                    }
+                    else if(box.innerText.length == 7){
+                        box.style.fontSize = "20px";
+                    }
+                    else if(box.innerText.length == 8){
+                        box.style.fontSize = "18px";
+                    }
+                    else if(box.innerText.length == 9){
+                        box.style.fontSize = "15px";
+                    }
+
+                    ////////////////////////
+                    oldNumbers.push(n1);
+                    oldNumbers.push(n2);
+                    oldIds.push(n1identification);
+                    oldIds.push(n2identification);
+                    /////////////////////////
+                
+                
+
+                    
+
+                    
+                    if (answer == targetNumber){
+
+                        disableGame();
+                        endTime = new Date();
+					    var timeTaken = (endTime - startTime) / 1000; 
+                        if(timeTaken<30){
+   					        var playerName = prompt("Enter your name for the leaderboard:"); 
+                    
+                            if (playerName) {
+					           saveScore(playerName, timeTaken); 
+				            }
+                        }
+                        
+                        
+                        
+                        
+                        
+                        numbers.forEach(number =>{
+                        number.style.backgroundColor = "#a01349";
+                        number.innerText = "";
+                        
+                            
+                        })
+                        box.style.backgroundColor = "#f0206c";
+                        box.innerText = answer;
+                        reset = document.getElementById('reset_calculations');
+                        reset.disabled = true;
+
+                        box.style.color = '#f5d000eb';
+                        box.style.backgroundColor = 'white';
+                        box.style.border = '4px solid #C9971E';
+                        tn = document.getElementById('target_Number');
+                        tn.style.backgroundColor = 'white';
+                        tn.style.border = '4px solid #DAA520';
+                        tn.style.color = '#f5d000eb';
+
+                        
+                        
+                        
+                        userTime = (endTime - startTime) / 1000;
+
+                        
+                        
+                        
+
+
+                    
+                   }
+
+                   numberOne = null;
+                   numberTwo = null;
+                   n1Id = null; 
+                   n2Id = null;
+                   selectedOperator = null;
+                
+            
+            
+
+                }
+                else if (answer == null){
+                box.disabled = false;
+                box2.disabled = false;
+                box.style.backgroundColor = "#f0206c";
+                box2.style.backgroundColor = "#f0206c";
+
+                numberOne = null;
+                numberTwo = null;
+                n1Id = null; 
+                n2Id = null;
+                selectedOperator = null;
+               }
+
+               
+                
+                console.log("Enabling back button line 589...")
+
+
+                ops.forEach(operator => {
+                        operator.style.backgroundColor = '#f0206c';
+                    })
+            
+            }
+            
+        
+
+
+        
+
+
+            function resetGame(){
+                location.reload();
+            }
+
+
+
+            function userMessage(){
+                var message = document.getElementById('user-message');
+                var operators = document.querySelectorAll('.operator-button');
+                operators.forEach(operator =>{
+                    operator.hidden = true;
+                })
+
+                var undoButtons = document.querySelectorAll('.undo_button');
+                undoButtons.forEach(button =>{
+                    button.hidden = true;
+                })
+            
+                
+
+
+                message.hidden = false;
+
+
+                        
+                if(userTime < 30 && userTime > 1){ 
+                    message.innerHTML = "Congrats you solved it 🏅 Your time was: " + userTime + "'s";
+                }
+                else if(userTime == null){
+                    message.innerHTML = "Hard Luck... You ran out of time " ;
+                }
+            }
+
+
+            function disableGame(){
+                
+                console.log("Disabling game...")
+
+                document.querySelectorAll('.number-box').forEach(number => {
+                    number.disabled = true;
+                });
+                console.log("Disabling number boxes...")
+
+
+                document.querySelectorAll('.operator-button').forEach(operator => {
+                    operator.disabled = true;
+                });
+                console.log("Disabling operator buttons...")
+
+
+                document.getElementById('back_one').disabled = true;
+                console.log("Disabling back button...")
+
+                document.getElementById('reset_calculations').disabled = true;
+                console.log("Disabling reset calculations...")
+
+
+
+                
+            }
+
+
+
+
+
+            // ===== NEW LEADERBOARD FUNCTIONS ===== //
+function saveScore(name, time) {
+  let scores = JSON.parse(localStorage.getItem('countdownScores')) || [];
+  scores.push({ name, time });
+  scores.sort((a, b) => a.time - b.time);
+  scores = scores.slice(0, 10); 
+  localStorage.setItem('countdownScores', JSON.stringify(scores));
+  
+  
+
+  var now = new Date();
+  var myTime = ((now - startTime)/1000);
+  if(myTime<10){
+    setTimeout(function() {
+      if (confirm('Your score has been saved! View the leaderboard?')) {
+        window.location.href = 'leaderboard.html';
+      }
+    }, 25000);
+  }
+  else if (myTime<15){
+    setTimeout(function() {
+      if (confirm('Your score has been saved! View the leaderboard?')) {
+        window.location.href = 'leaderboard.html';
+      }
+    }, 20000);
+  }
+  else if (myTime<20){
+    setTimeout(function() {
+      if (confirm('Your score has been saved! View the leaderboard?')) {
+        window.location.href = 'leaderboard.html';
+      }
+    }, 15000);
+  }
+  else if (myTime<25){
+    setTimeout(function() {
+      if (confirm('Your score has been saved! View the leaderboard?')) {
+        window.location.href = 'leaderboard.html';
+      }
+    }, 10000);
+  }
+  else if (myTime>25){
+    setTimeout(function() {
+      if (confirm('Your score has been saved! View the leaderboard?')) {
+        window.location.href = 'leaderboard.html';
+      }
+    }, 5000);
+  }
+  
+}
+
+function loadLeaderboard() {
+  const scores = JSON.parse(localStorage.getItem('countdownScores')) || [];
+  const leaderboard = document.getElementById('leaderboardEntries');
+  leaderboard.innerHTML = '';
+  
+  scores.forEach((entry, index) => {
+    const entryElement = document.createElement('div');
+    entryElement.className = 'leaderboard-entry';
+    entryElement.innerHTML = `
+      <span>${index + 1}. ${entry.name}</span>
+      <span>${entry.time.toFixed(2)}s</span>
+    `;
+    leaderboard.appendChild(entryElement);
+  });
+}
+
+window.onload = function () {
+loadLeaderboard();
+}
+
+
+        </script>
+    </body>  
+</html>
+

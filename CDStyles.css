@@ -1,0 +1,662 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jul 5, 2024, 9:48:00 AM
+    Author     : Leo McNicholas
+*/
+
+@keyframes rotate-hand{
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+
+p{
+    font-size: 20px;
+    font-family: fantasy;
+    color: white;
+   
+}
+
+
+
+h1
+{
+    margin: 0px auto;
+    color : white;
+    text-align: center;
+    font-size: 80px;
+    font-family: fantasy; 
+}
+
+h2{
+    position: absolute;
+    
+}
+
+body {
+    background-color: #a01349;
+}
+
+
+
+
+
+
+/* Clock */
+
+.outer-clock{
+
+    width: 158px;
+    height: 158px;
+    border-radius: 50%;
+    
+    border: 1.5px solid darkslategrey;
+    margin: auto;
+    position: relative;
+}
+
+
+.clock{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    
+    border: 4px solid grey;
+    background-color: white;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+}
+    
+    
+    
+
+.inner-clock{
+    width: 146px;
+    height: 146px;
+    border-radius: 50%;
+    
+    border: 3px solid #a01349;
+    background-color: white;
+    margin: auto;
+    position: relative;
+    
+    
+}
+
+
+
+
+
+
+
+#x-line{
+    background-color:grey;
+    width:145px;
+    height:0.5px;
+    margin: auto;
+    margin-top: 71px; 
+    z-index: 1;
+}
+    
+
+
+
+#y-line{
+    background-color:grey;
+    width:0.5px;
+    height:145px;
+    margin: auto;
+    margin-top: -71.5px;
+    
+
+    transform: rotate(0deg);
+    
+}
+
+.hand-circle{
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #a01349;
+   
+    
+    margin-top: -56.8%;
+    margin-left: 43.5%;
+    position: relative;
+
+    z-index: 2;
+}
+
+
+.hand{
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 75px solid #a01349;
+    margin: auto;
+    margin-left: 46.4%;
+    margin-top: -53.2%;
+    position: relative;
+    
+    z-index: 2;
+
+
+    transform-origin: bottom;
+
+
+    
+    
+}
+
+
+
+
+.hour{
+    background-color:grey;
+    width: 1px;
+    height: 12px;
+   
+}
+
+#hour-1{
+   
+   margin-top: -94%;
+   margin-left: 69%;
+
+   
+   transform: rotate(30deg);
+    
+}
+#hour-2{
+    margin-top: 12%;
+    margin-left: 89%;
+    transform: rotate(60deg);
+    
+}
+#hour-4{
+    margin-top: 32%;
+    margin-left: 89%;
+    transform: rotate(120deg);
+    
+}
+#hour-5{
+    margin-top: 12.5%;
+    margin-left: 67%;
+    transform: rotate(150deg);
+    
+}
+#hour-11{
+    margin-top: -28%;
+    margin-left: 30%;
+    transform: rotate(150deg);
+    
+}
+#hour-10{
+    margin-top: -48%;
+    margin-left: 9.5%;
+    transform: rotate(120deg);
+    
+}
+#hour-8{
+    margin-top: -30.5%;
+    margin-left: 10%;
+    transform: rotate(60deg);
+    
+}
+#hour-7{
+    margin-top: -7.5%;
+    margin-left: 31%;
+    left: 42px;
+    transform: rotate(30deg);
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+#rules-button {
+    background-color: #8b0f3e;  
+    color: white;              
+    border: none;              
+    font-family: fantasy;                           
+    font-size: 16px;           
+    text-align: justify;                 
+    width: 50px;                 
+    height: 35px;    
+    cursor: pointer;           
+    border-radius: 4px;        
+    position : absolute;  
+    top: 0%;           
+    left: 0%;          
+}
+
+
+#reset-button {
+    background-color: #8b0f3e;  
+    color: white;            
+    border: none;            
+    font-size: 16px;          
+    text-align: justify;       
+    font-family: fantasy;      
+    width: 75px;               
+    height: 35px;  
+    cursor: pointer;         
+    border-radius: 4px;       
+    position: absolute;  
+    top: 7%;          
+    left: 0%;        
+    
+}
+
+
+#start-button {
+    background-color: #d81b60;  
+    color: white;              
+    border: none;                  
+    font-size: 22px;           
+    text-align: center;        
+    font-family: fantasy;             
+    width: 80px;                 
+    height: 80px;
+    cursor: pointer;           
+    border-radius: 50%; 
+    position: absolute;      
+     
+    top: 42%;
+    right: 17%;         
+}
+#start-button:hover {
+    background-color: #c2185b; 
+}
+
+.startContainer{
+    display: grid;
+
+    grid-template-columns: auto auto;
+    gap: 10px; 
+    padding: 0px; 
+     
+    
+    
+    background: #a01349;
+    position: absolute;
+    top: 360px;
+    right: 200px;
+
+}
+
+
+.large-button-container {
+    display: grid;
+
+    grid-template-columns: auto auto;
+    gap: 10px; 
+    padding: 0px; 
+     
+    
+    
+    background: #a01349;
+    position: absolute;
+    top: 330px;
+    left: 80px;
+}
+
+
+
+
+
+.large-button {
+    background-color: #d81b60;  
+    color: white;              
+    border: none;             
+    padding: 1px 2px;        
+    font-size: 18px;           
+    font-family: fantasy; 
+    text-align: center;                
+    width: 78px;               
+    height: 52px;
+    cursor: pointer;          
+    border-radius: 4px;       
+}
+.large-button:hover {
+    background-color: #c2185b; 
+}
+
+
+#large-button-4 {
+    background-color: #d81b60;  
+    color: white;              
+    border: none;                 
+    padding: 1px 2px;       
+    font-size: 18px;           
+    text-align: center;       
+    font-family: fantasy; 
+    width: 78px;                 
+    height: 52px;
+    cursor: pointer;          
+    border-radius: 4px;        
+    position: absolute;   
+    top: 453px;
+    left: 124.5px;
+    
+}
+#large-button-4:hover {
+    background-color: #c2185b; 
+
+}
+
+
+
+
+
+
+
+
+
+
+
+.game-container {
+    Display: grid;
+    grid-template-rows: auto auto ;  
+    gap: 15px;                   
+   
+    background-color: #be1553;     
+    padding: 15px;                
+    border-radius: 10px;           
+    width: 50%;                  
+    margin: auto;
+
+    
+           
+    
+}
+
+
+.target-number {
+    background-color: #ec5b8b;    
+    color: white;             
+    text-align: center;           
+    font-size: 60px;   
+    font-family: fantasy;
+    padding: 15px;                 
+    border: 4px solid #a01349;
+    margin: -1% auto;
+    height: 66px;
+    width: 100px;
+        
+}
+
+
+.numbers-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;                             
+}
+
+
+.number-box {
+    background-color: #FF1A6C;    
+    color: white;
+    text-align: center;
+    padding: 10px 5px;              
+    border-radius: 0px;             
+    border: 4px solid #a01349;
+    font-size: 46px;
+    font-family: fantasy;
+    width: 90px;
+    height: 85px ; 
+    margin: 1.5% 5px -1.5% 5px; 
+    cursor: pointer;
+    
+}
+
+
+
+
+
+
+#b1 {
+    margin-left: 8px;
+}
+
+
+
+
+
+
+
+
+.solution-container{
+    font-family: fantasy;
+    color: white;
+    position: absolute;
+    right: 1.5%;
+    top: 47.5%
+    
+}
+
+
+
+
+#leaderboard-button {
+    background-color: #8b0f3e;  
+    color: white;              
+    border: none;              
+    font-family: fantasy;                           
+    font-size: 16px;           
+    text-align: left;                 
+    width: 100px;                 
+    height: 35px;    
+    cursor: pointer;           
+    border-radius: 4px;        
+    position : absolute;  
+    top: 14%;           
+    left: 0px;          
+}
+
+.leaderboard-full {
+    width: 80%;
+    max-width: 500px;
+    margin: 40px auto;
+    background-color: #be1553;
+    padding: 20px;
+    border-radius: 10px;
+    color: white;
+}
+
+#leaderboardEntries {
+    max-height: 400px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.leaderboard-entry {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #a01349;
+    font-size: 22px;
+}
+
+.no-scores {
+    text-align: center;
+    padding: 20px;
+    font-size: 20px;
+}
+
+#clear-leaderboard {
+    background-color: #8b0f3e;
+    color: white;
+    border: none;
+    font-family: fantasy;
+    font-size: 16px;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: block;
+    margin: 10px auto;
+}
+
+
+
+#reveal-button{
+    background-color: #d81b60;  
+    color: white;              
+    border: none;                  
+    font-size: 16px;           
+    text-align: center;        
+    font-family: fantasy;             
+    width: 80px;                 
+    height: 80px;
+    cursor: pointer;           
+    border-radius: 50%;       
+    position : absolute;  
+    top: 66%;           
+    right: 17%;
+}
+
+
+
+
+
+
+.operators-container{
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;
+    gap: 10px;
+
+}
+
+.operator-button{
+    background-color: #FF1A6C;
+    border: 4.5px solid #a01349;
+    width:60px;
+    height: 55px; 
+    color: white;
+    font-size: 45px;
+    margin: -4.5% 2% -2% 2%;
+    cursor: pointer;
+}
+
+.undo-container {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 15px auto;
+}
+
+.undo_button {
+    text-align: center;
+    background-color: #a01349;
+    border: 4px solid #FF1A6C;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 15px;
+    padding: 4px 20px;
+    cursor: pointer;
+    margin: -13% 2% 7% 2%;
+    
+    
+    
+    
+}
+
+
+
+
+.solution-container {
+    position: absolute;
+    left: 98%;
+    top: 56.5%;
+    transform: translate(-98%, -45%);
+    width: 10%;
+    padding: 2%;
+    background-color:#d81b60;
+    border: 0.2em solid #a01349;
+    border-radius: 1.5em;
+    box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #a01349;
+    text-align: left;
+    z-index: 10;
+}
+
+
+
+
+.solution-container h3 {
+    margin-top: 0;
+    color: #ffffff;
+    text-align: center;
+    font-size: 1.6em;
+    text-decoration: underline;
+}
+
+.solution-container p {
+    margin: 2% 0;
+    font-size: 1.15em;
+    line-height: 1.6;
+    padding: 1% 2%;
+    border-left: 0.4em solid #d81b60;
+    background-color: #ffffff;
+    border-radius: 0.8em;
+    color: #d81b60;
+}
+
+
+#user-message{
+    
+    
+    margin: -5% 2% 0% 2%;
+    font-size: 25px;
+    font-family: fantasy;
+    color: white;
+    
+}
+
+.rules-container{
+    font-size: 16px;
+    font-family: fantasy;
+    color: white;
+    text-align: center;
+    margin: 3% 0% -0% 0%;
+
+}
+
+#return-button{
+    background-color: #8b0f3e;  
+    color: white;            
+    border: none;            
+    font-size: 16px;          
+    text-align: justify;       
+    font-family: fantasy;      
+    width: 60px;               
+    height: 35px;  
+    cursor: pointer;         
+    border-radius: 4px;       
+    position: absolute;  
+    top: 0%;
+    left: 0%;
+}
+
+
+

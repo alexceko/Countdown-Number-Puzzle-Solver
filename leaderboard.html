@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Leaderboard</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="CDStyles.css">
+    </head>
+    <body>
+        <h1>Countdown Leaderboard</h1>
+        <div id="cornerbuttons">
+            <button id="rules-button" onclick="location.href='CDRules.html';">Rules</button> 
+            <button id="reset-button" onclick="location.href='index.html';">Return</button>
+        </div>
+        
+        <div class="leaderboard-full">
+            <div id="leaderboardEntries"></div>
+            <button id="clear-leaderboard" onclick="clearLeaderboard()">Clear Leaderboard</button>
+        </div>
+        
+        <script>
+            function loadLeaderboard() {
+                const scores = JSON.parse(localStorage.getItem('countdownScores')) || [];
+                const leaderboard = document.getElementById('leaderboardEntries');
+                leaderboard.innerHTML = '';
+                
+                if (scores.length === 0) {
+                    leaderboard.innerHTML = '<div class="no-scores">No scores yet. Play a game to set a record!</div>';
+                    return;
+                }
+                
+                scores.forEach((entry, index) => {
+                    const entryElement = document.createElement('div');
+                    entryElement.className = 'leaderboard-entry';
+                    entryElement.innerHTML = `
+                        <span>${index + 1}. ${entry.name}</span>
+                        <span>${entry.time.toFixed(2)}s</span>
+                    `;
+                    leaderboard.appendChild(entryElement);
+                });
+            }
+            
+            function clearLeaderboard() {
+                if (confirm('Are you sure you want to clear all leaderboard scores?')) {
+                    localStorage.removeItem('countdownScores');
+                    loadLeaderboard();
+                }
+            }
+            
+            // Load the leaderboard when the page loads
+            window.onload = function() {
+                loadLeaderboard();
+            }
+        </script>
+    </body>
+</html>
