@@ -2,9 +2,9 @@
 
 An interactive web-based puzzle game built with **HTML, CSS, and JavaScript**.  
 Features:
-- Real-time timer & scoring system  
+- Timer & scoring system  
 - Leaderboard with local storage  
-- Optimised performance using Web Workers  
+- Option to view solution  
 
 Countdown game link:
 https://70e3a007.countdown-bh9.pages.dev
