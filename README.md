@@ -9,8 +9,5 @@ Features:
 Countdown game link:
 https://70e3a007.countdown-bh9.pages.dev
 
-View the Code: 
-https://github.com/alexceko/Countdown-Number-Puzzle-Solver
-
 View full project report:
 https://docs.google.com/document/d/1XNcgVgfj0Cyi6FBW07-LlgrQQX-uBQK6/edit?usp=sharing&ouid=101236034982698271946&rtpof=true&sd=true
